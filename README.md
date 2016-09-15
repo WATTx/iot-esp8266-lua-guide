@@ -1,12 +1,13 @@
 # ESP8266 + Lua
 
-I used **Wemos D1-mini** board. It wasn't easy but eventually I managed to make it work.
+I used **Wemos D1-mini** and **NodeMCU Amica** board. It wasn't easy but eventually I managed to make it work.
 
 ### Requirements
 
 - Python + pip
 - [Wemos Driver](http://www.wemos.cc/downloads/)
 - [ESPtool](https://github.com/themadinventor/esptool)
+- [nodemcu-tool](https://github.com/AndiDittrich/NodeMCU-Tool)
 - [LuaTool](https://github.com/4refr0nt/luatool)
 
 ### Useful links
@@ -21,14 +22,14 @@ I used **Wemos D1-mini** board. It wasn't easy but eventually I managed to make 
 
 (My device name is: `cu.wchusbserial1410` – if you use Linux the name might be different - you can easily find it out by listing `/dev/` directoy)
 
-1. Install all tools from the requirements.
-2. Before you start, erase everything from your flash memory:
+1. Install tools from the requirements.
+2. Connect your bord and erase everything from the flash memory:
 
 	```
 sudo esptool.py --port /dev/cu.wchusbserial1410 erase_flash
 	```
 
-3. Now we can upload `bin` file to **Wemos** (`--verify` flag will check if digest matches)
+3. Now we can upload `bin` file to your module (`--verify` flag will check if digest matches)
 
 	```
 sudo esptool.py --port /dev/cu.wchusbserial1410 --baud 9600 write_flash 0x00000 ./bin/nodemcu-master-7-modules-2016-09-14-16-58-11-float.bin 0x3fc000 ./bin/esp_init_data_default.bin -fm dio -fs 32m
@@ -51,7 +52,7 @@ Verifying 0x587fc (362492) bytes @ 0x00000000 in flash against bin/nodemcu-maste
 -- verify OK (digest matched)
 	```
 
-5. You have to **REBOOT** your Wemos by clicking the `Reset` button on the board. The LED should blink once. If it's blinking like crazy, probably something went wrong while uploading your `firmware`. Try to repeat all steps: erase & upload.
+5. You have to **REBOOT** your board by clicking the `Reset` button. The LED should blink once. If it's blinking like crazy, probably something went wrong while uploading your `firmware`. Try to repeat all steps: erase & upload and make sure that your are setting `-fm` and `-fs`.
 
 
 ### Uploading Lua files
@@ -63,12 +64,44 @@ Verifying 0x587fc (362492) bytes @ 0x00000000 in flash against bin/nodemcu-maste
 3. Open / Create lua script.
 4. Click **Save to ESP**
 
-##### Using luatool.py
+#### Using nodemcu-tool
 
-1. Run `luatool.py` with source and destination flag:
+1. Install [nodemcu-tool](https://github.com/AndiDittrich/NodeMCU-Tool)
 
 	```
-sudo ./utils/luatool.py -p /dev/cu.wchusbserial1410 --src ./lua/led.lua --dest init.lua --verbose
+npm i -g nodemcu-tool
+	```
+	
+2. Upload Lua file:
+
+	```
+nodemcu-tool --port /dev/cu.wchusbserial1410 upload ./lua/led/init.lua
+	```
+
+3. Press **Reset** button
+
+**NodeMCU-Tool** offers more useful commands:
+
+```
+fsinfo [options]             Show file system info (current files, memory usage)
+run <file>                   Executes an existing .lua or .lc file on NodeMCU
+upload [options] [files...]  Upload Files to NodeMCU (ESP8266) target
+download <file>              Download files from NodeMCU (ESP8266) target
+remove <file>                Removes a file from NodeMCU filesystem
+mkfs [options]               Format the SPIFFS filesystem - ALL FILES ARE REMOVED
+terminal [options]           Opens a Terminal connection to NodeMCU
+init                         Initialize a project-based Configuration (file) within current directory
+devices [options]            Shows a list of all available NodeMCU Modules/Serial Devices
+reset [options]              Execute a Hard-Reset of the Module using DTR/RTS reset circuit
+```
+
+
+##### Using luatool.py
+
+1. Run `luatool.py`
+
+	```
+sudo luatool.py -p /dev/cu.wchusbserial1410 --src ./lua/led.lua --dest init.lua --verbose
 	```
 
 	Your console should print 4 Stages:
@@ -96,14 +129,10 @@ sudo ./utils/luatool.py -p /dev/cu.wchusbserial1410 --src ./lua/led.lua --dest i
 2. Press the `Reset` button.
 3. LED should start blinking.
 
-#### Using nodemcu-tool
-
-More info: [nodemcu-tool](https://github.com/AndiDittrich/NodeMCU-Tool)
-
 
 ### Makefile
 
-(Check your device name first and replace if needed)
+(Check your device name and replace if needed)
 
 - `make erase` will erase everything from the flash memory
 - `make flash` will upload binary file
@@ -115,11 +144,9 @@ It ain't so easy to use Lua together with D1-mini board. Sometimes firmware prod
 
 It would be great to have IDE like Arduino where everything works out of the box.
 
-### Other tools
+###### UPDATE:  
 
-- https://github.com/themadinventor/esptool
-- http://esp8266.ru/esplorer/
-- https://github.com/AndiDittrich/NodeMCU-Tool
+I tried to flash **AI-Thinker** module and everything went smooth but I couldn't use ESPlorer. I had to switch to `nodemcu-tool` which are perfect if you prefer to use CLI.
 
 ### Lua resources
 
