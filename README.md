@@ -1,6 +1,6 @@
 # ESP8266 + Lua
 
-I used **Wemos D1-mini** and **NodeMCU Amica** board. It wasn't easy but eventually I managed to make it work.
+I used **Wemos D1-mini** and **NodeMCU Amica** board. It wasn't easy, but eventually I managed to make it work.
 
 ### Requirements
 
@@ -23,7 +23,7 @@ I used **Wemos D1-mini** and **NodeMCU Amica** board. It wasn't easy but eventua
 (My device name is: `cu.wchusbserial1410` – if you use Linux the name might be different - you can easily find it out by listing `/dev/` directoy)
 
 1. Install tools from the requirements.
-2. Connect your bord and erase everything from the flash memory:
+2. Connect your board and erase everything from the flash memory:
 
 	```
 sudo esptool.py --port /dev/cu.wchusbserial1410 erase_flash
@@ -71,7 +71,7 @@ Verifying 0x587fc (362492) bytes @ 0x00000000 in flash against bin/nodemcu-maste
 	```
 npm i -g nodemcu-tool
 	```
-	
+
 2. Upload Lua file:
 
 	```
@@ -140,13 +140,13 @@ sudo luatool.py -p /dev/cu.wchusbserial1410 --src ./lua/led.lua --dest init.lua 
 
 ### Thoughts
 
-It ain't so easy to use Lua together with D1-mini board. Sometimes firmware produces garbage output on the console (https://github.com/nodemcu/nodemcu-firmware/issues/1474). I still didn't figure it out why it's happening.  
+It ain't so easy to use Lua together with D1-mini board. Sometimes firmware produces garbage output on the console (https://github.com/nodemcu/nodemcu-firmware/issues/1474). I still didn't figure it out why it's happening.
 
 It would be great to have IDE like Arduino where everything works out of the box.
 
-###### UPDATE:  
+###### UPDATE:
 
-I tried to flash **AI-Thinker** module and everything went smooth but I couldn't use ESPlorer. I had to switch to `nodemcu-tool` which are perfect if you prefer to use CLI.
+I tried to flash **AI-Thinker** module and everything went smooth but I couldn't use ESPlorer. I had to switch to `nodemcu-tool` which is perfect if you prefer to use CLI.
 
 ### Lua resources
 
