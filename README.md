@@ -25,21 +25,21 @@ I used **Wemos D1-mini** and **NodeMCU Amica** board. It wasn't easy, but eventu
 1. Install tools from the requirements.
 2. Connect your board and erase everything from the flash memory:
 
-	```
+```
 sudo esptool.py --port /dev/cu.wchusbserial1410 erase_flash
-	```
+```
 
 3. Now we can upload `bin` file to your module (`--verify` flag will check if digest matches)
 
-	```
+```
 sudo esptool.py --port /dev/cu.wchusbserial1410 --baud 9600 write_flash 0x00000 ./bin/nodemcu-master-7-modules-2016-09-14-16-58-11-float.bin 0x3fc000 ./bin/esp_init_data_default.bin -fm dio -fs 32m
-	```
+```
 
-	(Change the path to `bin` file if you're going to use custom firmware)
+(Change the path to `bin` file if you're going to use custom firmware)
 
 4. Once it's ready you should see logs like this:
 
-	```
+```
 esptool.py v1.1
 Connecting...
 Running Cesanta flasher stub...
@@ -50,7 +50,7 @@ Leaving...
 Verifying just-written flash...
 Verifying 0x587fc (362492) bytes @ 0x00000000 in flash against bin/nodemcu-master-10-modules-2015-09-29-17-58-26-integer.bin...
 -- verify OK (digest matched)
-	```
+```
 
 5. You have to **REBOOT** your board by clicking the `Reset` button. The LED should blink once. If it's blinking like crazy, probably something went wrong while uploading your `firmware`. Try to repeat all steps: erase & upload and make sure that your are setting `-fm` and `-fs`.
 
@@ -68,15 +68,15 @@ Verifying 0x587fc (362492) bytes @ 0x00000000 in flash against bin/nodemcu-maste
 
 1. Install [nodemcu-tool](https://github.com/AndiDittrich/NodeMCU-Tool)
 
-	```
+```
 npm i -g nodemcu-tool
-	```
+```
 
 2. Upload Lua file:
 
-	```
+```
 nodemcu-tool --port /dev/cu.wchusbserial1410 upload ./lua/led/init.lua
-	```
+```
 
 3. Press **Reset** button
 
@@ -100,31 +100,31 @@ reset [options]              Execute a Hard-Reset of the Module using DTR/RTS re
 
 1. Run `luatool.py`
 
-	```
+```
 sudo luatool.py -p /dev/cu.wchusbserial1410 --src ./lua/led.lua --dest init.lua --verbose
-	```
+```
 
-	Your console should print 4 Stages:
+Your console should print 4 Stages:
 
-	```
-	Upload starting
+```
+Upload starting
 
-	Stage 1. Deleting old file from flash memory
-	->file.open("init.lua", "w") -> ok
-	->file.close() -> ok
+Stage 1. Deleting old file from flash memory
+->file.open("init.lua", "w") -> ok
+->file.close() -> ok
 
-	Stage 2. Creating file in flash memory and write first line->file.remove("init.lua") -> ok
+Stage 2. Creating file in flash memory and write first line->file.remove("init.lua") -> ok
 
-	Stage 3. Start writing data to flash memory...->file.open("init.lua", "w+") -> ok
-	-> ...
+Stage 3. Start writing data to flash memory...->file.open("init.lua", "w+") -> ok
+-> ...
 
 
-	Stage 4. Flush data and closing file->file.writeline([==[tmr.alarm(0, duration, 1, blink)]==]) -> ok
-	->file.flush() -> ok
-	->file.close() -> ok
+Stage 4. Flush data and closing file->file.writeline([==[tmr.alarm(0, duration, 1, blink)]==]) -> ok
+->file.flush() -> ok
+->file.close() -> ok
 
-	--->>> All done <<<---
-	```
+--->>> All done <<<---
+```
 
 2. Press the `Reset` button.
 3. LED should start blinking.
